@@ -1,5 +1,6 @@
 from api.core import Mixin
 from .base import db
+from .Link import Link
 
 # Note that we use sqlite for our tests, so you can't use Postgres Arrays
 class Email(Mixin, db.Model):
@@ -9,8 +10,11 @@ class Email(Mixin, db.Model):
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
     email = db.Column(db.String, nullable=False)
-    person = db.Column(
-        db.Integer, db.ForeignKey("person.id", ondelete="SET NULL"), nullable=True
+    name = db.Column(db.String, nullable=False)
+    parent_link_id = db.Column(db.Integer, db.ForeignKey('link.id'),
+        nullable=False)
+    parent_link = db.Column(
+        db.Integer, db.ForeignKey("link.id", ondelete="SET NULL"), nullable=True
     )
 
     def __init__(self, email):
