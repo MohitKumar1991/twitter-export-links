@@ -11,9 +11,7 @@ class Email(Mixin, db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
     email = db.Column(db.String, nullable=False)
     name = db.Column(db.String, nullable=False)
-    parent_link_id = db.Column(db.Integer, db.ForeignKey('link.id'),
-        nullable=False)
-    parent_link = db.Column(
+    parent_link_id = db.Column(
         db.Integer, db.ForeignKey("link.id", ondelete="SET NULL"), nullable=True
     )
 

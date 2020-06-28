@@ -1,10 +1,11 @@
 import configparser
-import logging
+import logging, traceback
 from typing import Tuple, List
 
 from werkzeug.local import LocalProxy
 from flask import current_app, jsonify
 from flask.wrappers import Response
+from datetime import datetime
 
 # logger object for all views to use
 logger = LocalProxy(lambda: current_app.logger)
@@ -18,7 +19,11 @@ class Mixin:
     """
 
     def to_dict(self) -> dict:
-        d_out = dict((key, val) for key, val in self.__dict__.items())
+        d_out = dict()
+        for key, val in self.__dict__.items():
+            if isinstance(val, datetime):
+                val = str(val)
+            d_out[key] = val
         d_out.pop("_sa_instance_state", None)
         d_out["_id"] = d_out.pop("id", None)  # rename id key to interface with response
         return d_out
@@ -68,6 +73,8 @@ def all_exception_handler(error: Exception) -> Tuple[Response, int]:
     :param Exception
     :returns Tuple of a Flask Response and int
     """
+    print(error)
+    traceback.print_exc()
     return create_response(message=str(error), status=500)
 
 
