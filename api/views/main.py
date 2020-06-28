@@ -91,9 +91,10 @@ def email():
 @main.route("/l/<linkurl>", methods=["GET"])
 def rendersubmit(linkurl):
     link = Link.query.filter_by(url=linkurl).first()
+    username = request.args.get('u','')
     if link is None:
         return Response(json.dumps({'error': 'wrong link url' }), mimetype='application/json', status=404)
-    return render_template('submit.html', link_id=link.id)
+    return render_template('submit.html', link_id=link.id,username=username)
 
 #get all emails submitted for a particular user
 @main.route("/emails", methods=["GET"])
